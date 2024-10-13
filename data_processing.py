@@ -1,53 +1,10 @@
 import re
-
-from selenium import webdriver
-import time
-from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
-from selenium.webdriver.chrome.options import Options
 import re as regexBrowser
-from selenium.webdriver.chrome.options import Options
+import web_scraping
 
-# chrome_options = Options()
-# chrome_options.add_argument("--headless")
-options = webdriver.ChromeOptions()
-options.add_experimental_option("detach", True)
-# browser = webdriver.Chrome(options=chrome_options)
-browser = webdriver.Chrome(options=options)
-# browser.get("https://e-university.tu-sofia.bg/ETUS/studenti/")
-browser.get("file:///D:/gitRepositories/University-Grades-Statistics-App/content0.html")
 
-"""
-faculty_number_field = browser.find_element(By.XPATH, "//*[@id='fnum']")
-faculty_number_field.send_keys(faculty_number)
-
-time.sleep(1)
-
-egn_field = browser.find_element(By.XPATH, "//*[@id='egn']")
-time.sleep(1)
-egn_field.click()
-time.sleep(1)
-egn_field.send_keys(egn)
-time.sleep(1)
-
-print("fill the text from the image")
-input()
-
-time.sleep(1)
-
-login_button = browser.find_element(By.XPATH, "//*[@id='but']")
-login_button.click()
-time.sleep(1)
-
-browser.find_element(By.XPATH, "//*[@id='desk']/u[3]").click()
-time.sleep(1)
-"""
-
-html = browser.page_source
-
-browser.close()
-
-soup = BeautifulSoup(html, "html.parser")
+soup = BeautifulSoup(web_scraping.take_data(), "html.parser")
 clearedSoup = soup.find_all("tr")
 
 degree_pattern = r'<b>(.*?)<\/b>.*<i>(.*?)<\/i>'
