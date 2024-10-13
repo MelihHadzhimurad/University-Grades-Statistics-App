@@ -40,20 +40,13 @@ for tag in first_level_filtered_data:
         """
         raw_degree_data = list(match.group(2).split("<br/>"))
 
-        if raw_degree_data[0] == "oценка:":
-            degree_match = re.search(degree_pattern, str(raw_degree_data[1]), re.DOTALL)
+        for index in raw_degree_data:
+            degree_match = re.search(degree_pattern, str(index), re.DOTALL)
+
             if degree_match:
                 print(match.group(1) + "|" + degree_match.group(1) + "|" + degree_match.group(2))
             else:
                 continue
-        else:
-            for index in raw_degree_data:
-                degree_match = re.search(degree_pattern, str(index), re.DOTALL)
-
-                if degree_match:
-                    print(match.group(1) + "|" + degree_match.group(1) + "|" + degree_match.group(2))
-                else:
-                    continue
     else:
         match_semester = re.search(semester_pattern, str(tag), re.DOTALL)
 
