@@ -1,7 +1,6 @@
 from selenium import webdriver
 import time
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.options import Options
+
 
 def take_data():
     browser = webdriver.Chrome()
