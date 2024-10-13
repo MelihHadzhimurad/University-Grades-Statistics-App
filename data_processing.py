@@ -21,30 +21,30 @@ def get_data_in_frame():
 
     subject_data_pattern = r'<b>(.*?)<\/b>.*<i>(.*?)<\/i>'
     semester_pattern = r'<b>(.*?)<\/b>'
-    degree_pattern = r'\((\d+)\)\s*\((\w+)\)'
+    grade_pattern = r'\((\d+)\)\s*\((\w+)\)'
 
     semester_count = 1
     subjects = []
     years = []
     semesters = []
-    degrees = []
+    grades = []
     sessions = []
 
     for tag in first_level_filtered_data:
         match = re.search(subject_data_pattern, str(tag), re.DOTALL)
 
         if match:
-            raw_degree_data = list(match.group(2).split("<br/>"))
+            raw_grade_data = list(match.group(2).split("<br/>"))
 
-            for index in raw_degree_data:
-                degree_match = re.search(degree_pattern, str(index), re.DOTALL)
+            for index in raw_grade_data:
+                grade_match = re.search(grade_pattern, str(index), re.DOTALL)
 
-                if degree_match:
+                if grade_match:
                     subjects.append(str(match.group(1)))
-                    years.append(str(get_year(semester_count)))
-                    semesters.append(str(semester_count))
-                    degrees.append(str(degree_match.group(1)))
-                    sessions.append(str(degree_match.group(2)))
+                    years.append(int(get_year(semester_count)))
+                    semesters.append(int(semester_count))
+                    grades.append(int(grade_match.group(1)))
+                    sessions.append(str(grade_match.group(2)))
                 else:
                     continue
         else:
@@ -60,8 +60,10 @@ def get_data_in_frame():
         "Subject": subjects,
         "Year": years,
         "Semester": semesters,
-        "Degree": degrees,
+        "Grade": grades,
         "Session": sessions
     }
+
+    pandas.set_option("display.max_columns", None)
 
     return pandas.DataFrame(data)
