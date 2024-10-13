@@ -1,15 +1,12 @@
+import re
+
 from selenium import webdriver
 import time
-# from selenium.webdriver.common.by import By
-# from bs4 import BeautifulSoup
+from selenium.webdriver.common.by import By
+from bs4 import BeautifulSoup
 from selenium.webdriver.chrome.options import Options
-# import re as regexBrowser
+import re as regexBrowser
 from selenium.webdriver.chrome.options import Options
-
-"""
-faculty_number = str(input("Faculty Number: "))
-egn = str(input("EGN: "))
-"""
 
 # chrome_options = Options()
 # chrome_options.add_argument("--headless")
@@ -17,13 +14,9 @@ options = webdriver.ChromeOptions()
 options.add_experimental_option("detach", True)
 # browser = webdriver.Chrome(options=chrome_options)
 browser = webdriver.Chrome(options=options)
-time.sleep(1)
-browser.get("https://e-university.tu-sofia.bg/ETUS/studenti/")
-# browser.get("file:///D:/gradeCalculator/content.html")
-time.sleep(5)
+# browser.get("https://e-university.tu-sofia.bg/ETUS/studenti/")
+browser.get("file:///D:/gitRepositories/University-Grades-Statistics-App/content0.html")
 
-browser.download_file('captcha.php', "C:\Users\user\downloads")
-browser.implicitly_wait(5)
 """
 faculty_number_field = browser.find_element(By.XPATH, "//*[@id='fnum']")
 faculty_number_field.send_keys(faculty_number)
@@ -49,14 +42,32 @@ time.sleep(1)
 browser.find_element(By.XPATH, "//*[@id='desk']/u[3]").click()
 time.sleep(1)
 """
-"""
+
 html = browser.page_source
 
 browser.close()
 
 soup = BeautifulSoup(html, "html.parser")
-grades = soup.find_all("tr")
+clearedSoup = soup.find_all("tr")
 
+degree_pattern = r'<b>(.*?)<\/b>.*<i>(.*?)<\/i>'
+semester_pattern = r'<b>(.*?)<\/b>'
+
+for tag in clearedSoup:
+    match = re.search(degree_pattern, str(tag), re.DOTALL)
+
+    if(match):
+        print(match.group(1) + " -- " + match.group(2))
+    else:
+        match_semester = re.search(semester_pattern, str(tag), re.DOTALL)
+
+        if(match_semester):
+            try:
+                print(int(match_semester.group(1)[0]))
+            except:
+                continue
+
+"""
 semesterCounter = 0
 sumOfGrades = 0
 gradeCounter = 0
