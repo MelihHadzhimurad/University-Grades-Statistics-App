@@ -21,7 +21,7 @@ def get_data_in_frame():
 
     subject_data_pattern = r'<b>(.*?)<\/b>.*<i>(.*?)<\/i>'
     semester_pattern = r'<b>(.*?)<\/b>'
-    grade_pattern = r'\((\d+)\)\s*\(([\w\s]+\))'
+    grade_pattern = r'\((\d+)\)\s*\(([\w\s]+)\)'
 
     semester_count = 1
     subjects = []
@@ -35,7 +35,7 @@ def get_data_in_frame():
 
         if match:
             raw_grade_data = list(match.group(2).split("<br/>"))
-            # print(match.group(1))
+
             for index in raw_grade_data:
                 grade_match = re.search(grade_pattern, str(index), re.DOTALL)
 
