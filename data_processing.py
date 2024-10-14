@@ -19,7 +19,7 @@ def get_data_in_frame():
     raw_data = BeautifulSoup(web_scraping.take_data(), "html.parser")
     first_level_filtered_data = raw_data.find_all("tr")
 
-    subject_data_pattern = r'<b>(.*?)<\/b>.*<i>(.*?)<\/i>'
+    subject_data_pattern = r'<b>(.*?)<\/b><\/span>\s*\((.*?)\),.*<i>(.*?)<\/i>'
     semester_pattern = r'<b>(.*?)<\/b>'
     grade_pattern = r'\((\d+)\)\s*\(([\w\s]+)\)'
 
@@ -27,6 +27,7 @@ def get_data_in_frame():
     subjects = []
     years = []
     semesters = []
+    examinations = []
     grades = []
     sessions = []
 
@@ -34,7 +35,7 @@ def get_data_in_frame():
         match = re.search(subject_data_pattern, str(tag), re.DOTALL)
 
         if match:
-            raw_grade_data = list(match.group(2).split("<br/>"))
+            raw_grade_data = list(match.group(3).split("<br/>"))
 
             for index in raw_grade_data:
                 grade_match = re.search(grade_pattern, str(index), re.DOTALL)
@@ -43,6 +44,7 @@ def get_data_in_frame():
                     subjects.append(str(match.group(1)))
                     years.append(int(get_year(semester_count)))
                     semesters.append(int(semester_count))
+                    examinations.append(str(match.group(2)))
                     grades.append(int(grade_match.group(1)))
                     sessions.append(str(grade_match.group(2)))
                 else:
@@ -60,6 +62,7 @@ def get_data_in_frame():
         "Subject": subjects,
         "Year": years,
         "Semester": semesters,
+        "Examination": examinations,
         "Grade": grades,
         "Session": sessions
     }
