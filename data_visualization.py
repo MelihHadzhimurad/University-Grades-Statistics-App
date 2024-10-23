@@ -1,5 +1,4 @@
 import pandas
-
 import data_processing
 import matplotlib.pyplot as plot
 
@@ -20,6 +19,13 @@ print("Fives: \n" + str(data_frame[data_frame["Grade"] == 5]["Subject"].count())
 print("Sixes: \n" + str(data_frame[data_frame["Grade"] == 6]["Subject"].count()))
 """
 
+# the last grade for each subject(if all grades are 2, take last, else take last grade different from 2)
+# half implemented, must be finished!
+"""
 subjects_frame = pandas.DataFrame({"Subjects": data_frame["Subject"]})
 
 print(data_frame[(data_frame["Subject"].duplicated().equals(False)) or (data_frame["Grade"] != 2)])
+"""
+
+# Grade that appears the most
+# print(data_frame["Grade"].mode())
