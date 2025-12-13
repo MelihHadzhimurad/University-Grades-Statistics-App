@@ -69,5 +69,7 @@ def get_data_in_frame():
 
     pandas.set_option("display.max_columns", None)
     pandas.set_option("display.max_rows", None)
+    pandas.set_option('display.width', None)
+
 
     return pandas.DataFrame(data)
