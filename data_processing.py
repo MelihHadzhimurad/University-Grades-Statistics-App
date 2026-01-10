@@ -3,6 +3,12 @@ from bs4 import BeautifulSoup
 import web_scraping
 import pandas
 
+# Configure pandas display settings
+pandas.set_option("display.max_columns", None)
+pandas.set_option("display.max_rows", None)
+pandas.set_option('display.width', None)
+pandas.set_option('display.max_colwidth', None)
+
 
 def get_year(semester):
     if semester == 1 or semester == 2:
@@ -17,6 +23,11 @@ def get_year(semester):
 
 def get_data_in_frame():
     raw_data = BeautifulSoup(web_scraping.take_data(), "html.parser")
+    
+    # Extract student name from the input field with id="izh"
+    student_name_tag = raw_data.find("input", {"id": "izh"})
+    student_name = student_name_tag.parent.get_text(strip=True).replace(student_name_tag.get_text(strip=True), '').strip() if student_name_tag else "Unknown"
+    
     first_level_filtered_data = raw_data.find_all("tr")
 
     subject_data_pattern = r'<b>(.*?)<\/b><\/span>\s*\((.*?)\),.*<i>(.*?)<\/i>'
@@ -67,9 +78,7 @@ def get_data_in_frame():
         "Session": sessions
     }
 
-    pandas.set_option("display.max_columns", None)
-    pandas.set_option("display.max_rows", None)
-    pandas.set_option('display.width', None)
-
-
-    return pandas.DataFrame(data)
+    return {
+        "Student": student_name,
+        "Data": pandas.DataFrame(data)
+    }
