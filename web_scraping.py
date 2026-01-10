@@ -11,7 +11,7 @@ def take_data():
     # print("Fill the necessary data and log in, then navigate to grades section. Click enter when you done.")
     # input()
 
-    # time.sleep(1)
+    time.sleep(1)
 
     html = browser.page_source
 
