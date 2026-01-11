@@ -27,7 +27,7 @@ def get_student_name():
 def average_grade_by_semester():
     """Create a line chart visualizing average grade for each semester"""
     # Calculate average grade for each semester
-    avg_grades = data_frame.groupby("Semester")["Grade"].mean().sort_index()
+    avg_grades = data_processing.filter_duplicate_grades(data_frame).groupby("Semester")["Grade"].mean().sort_index()
     
     # Create the line chart
     fig = plot.figure(figsize=(12, 6))
@@ -53,7 +53,7 @@ def average_grade_by_semester():
 def average_grade_by_year():
     """Create a line chart visualizing average grade for each year"""
     # Calculate average grade for each year
-    avg_grades = data_frame.groupby("Year")["Grade"].mean().sort_index()
+    avg_grades = data_processing.filter_duplicate_grades(data_frame).groupby("Year")["Grade"].mean().sort_index()
     
     # Create the line chart
     fig = plot.figure(figsize=(12, 6))

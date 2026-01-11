@@ -21,6 +21,45 @@ def get_year(semester):
         return 4
 
 
+def filter_duplicate_grades(data_frame):
+    rows_to_drop = []
+    
+    # Group by Subject AND Examination to find duplicates
+    grouped = data_frame.groupby(["Subject", "Examination"])
+    
+    for (subject, exam_form), group in grouped:
+        # Only process if examination form is 'Текуща оценка' or 'Изпит'
+        if exam_form in ["Текуща оценка", "Изпит"]:
+            if len(group) > 1:  # Only if there are multiple entries for this subject+exam combination
+                grades = group["Grade"].values
+                indices = group.index.values
+                
+                # Check if there's any grade > 2
+                grades_above_2 = [g for g in grades if g > 2]
+                
+                if grades_above_2:
+                    # Keep only the grade > 2 (should be the last/latest one)
+                    grade_to_keep = max(grades_above_2)
+                    # Drop all entries except the one with grade > 2
+                    for idx in indices:
+                        if data_frame.loc[idx, "Grade"] != grade_to_keep:
+                            rows_to_drop.append(idx)
+                else:
+                    # All grades are <= 2, keep only one grade of 2
+                    # Drop all but the first occurrence
+                    first_kept = False
+                    for idx in indices:
+                        if not first_kept:
+                            first_kept = True
+                        else:
+                            rows_to_drop.append(idx)
+    
+    # Drop the identified rows
+    data_frame = data_frame.drop(rows_to_drop)
+    
+    return data_frame
+
+
 def get_data_in_frame():
     raw_data = BeautifulSoup(web_scraping.take_data(), "html.parser")
     
@@ -77,7 +116,7 @@ def get_data_in_frame():
         "Grade": grades,
         "Session": sessions
     }
-
+    
     return {
         "Student": student_name,
         "Data": pandas.DataFrame(data)
